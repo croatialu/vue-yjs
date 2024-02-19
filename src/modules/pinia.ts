@@ -1,10 +1,23 @@
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import type { UserModule } from '~/types'
 
 // Setup Pinia
 // https://pinia.vuejs.org/
 export const install: UserModule = ({ isClient, initialState, app }) => {
   const pinia = createPinia()
+
+  pinia.use(piniaPluginPersistedstate)
+
+  // pinia.use(({ store }) => {
+  //   store.$onAction(({ after }) => {
+  //     after(() => {
+  //       console.log(`${store.$id}, store`, store.$state)
+  //       // 拿 store 的值 同步到  yjs
+  //     })
+  //   })
+  // })
+
   app.use(pinia)
   // Refer to
   // https://github.com/antfu/vite-ssg/blob/main/README.md#state-serialization

@@ -1,8 +1,16 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+
 const router = useRouter()
 const route = useRoute('/hi/[name]')
 const user = useUserStore()
 const { t } = useI18n()
+
+const todoStore = useTodoStore()
+
+const { todos } = storeToRefs(todoStore)
+
+const todoText = ref('')
 
 watchEffect(() => {
   user.setNewName(route.params.name)
@@ -34,6 +42,37 @@ watchEffect(() => {
         </ul>
       </p>
     </template>
+
+    <div>
+      <TheInput
+        v-model="todoText"
+        placeholder="input"
+        autocomplete="false"
+      />
+
+      <button m="3 t6" text-lg btn @click="todoStore.addTodo(todoText);todoText = ''">
+        Add
+      </button>
+    </div>
+
+    <ul>
+      <li v-for="todo in todos" :key="todo.id">
+        <input
+          border
+          border-gray-300
+          :value="todo.text"
+          @input="event => {
+            todoStore.updateTodo(todo.id, {
+              text: (event.target as HTMLInputElement).value,
+            })
+          }"
+        >
+
+        <button @click="todoStore.removeTodo(todo.id)">
+          Delete
+        </button>
+      </li>
+    </ul>
 
     <div>
       <button
