@@ -9,6 +9,20 @@ interface TodoItem {
 
 export const todoDoc = new Y.Doc()
 
+function AbstractTypeToJSON(value: Y.Array<any> | Y.Map<any>) {
+  if (value instanceof Y.Array)
+    return value.toArray().map((item): any => AbstractTypeToJSON(item))
+  if (value instanceof Y.Map) {
+    const record: Record<string, any> = {}
+    value.forEach((value, key) => {
+      record[key] = AbstractTypeToJSON(value)
+    })
+
+    return record
+  }
+  return value
+}
+
 export const useTodoStore = defineStore('todo', () => {
   const todos: Ref<TodoItem[]> = shallowRef([])
 
@@ -50,16 +64,24 @@ export const useTodoStore = defineStore('todo', () => {
   persist: {
     storage: {
       getItem(key: string) {
-        // console.log('getItem', key, localStorage.getItem(key))
+        const map = todoDoc.getMap(key)
 
-        const data = todoDoc.get(key)
+        const value = map.get('VALUE') as any
 
-        return localStorage.getItem(key)
+        return JSON.stringify(AbstractTypeToJSON(value))
       },
-      setItem(key: string, value: string) {
-        const data = JSON.parse(value)
+      setItem(key: string, _value: string) {
+        const data = JSON.parse(_value) as any
 
-        localStorage.setItem(key, value)
+        const map = todoDoc.getMap(key)
+
+        if (!map.get('VALUE')) {
+          if (Array.isArray(data))
+            map.set('VALUE', new Y.Array())
+          else if (typeof data === 'object')
+            map.set('VALUE', new Y.Map())
+        }
+        const value = map.get('VALUE')
       },
     },
   },
