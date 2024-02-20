@@ -1,5 +1,7 @@
 import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import * as Y from 'yjs'
+import { WebrtcProvider } from 'y-webrtc'
+import PiniaPluginYjs from 'pinia-plugin-yjs'
 import type { UserModule } from '~/types'
 
 // Setup Pinia
@@ -7,7 +9,13 @@ import type { UserModule } from '~/types'
 export const install: UserModule = ({ isClient, initialState, app }) => {
   const pinia = createPinia()
 
-  pinia.use(piniaPluginPersistedstate)
+  pinia.use(PiniaPluginYjs)
+  // pinia.use(piniaPluginPersistedstate)
+  // pinia.use(({ store }) => {
+  //   store.$subscribe((mutation, state) => {
+  //     console.log(store.$id, mutation, JSON.parse(JSON.stringify(state)), 'mutation')
+  //   })
+  // })
 
   // pinia.use(({ store }) => {
   //   store.$onAction(({ after }) => {

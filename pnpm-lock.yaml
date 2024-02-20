@@ -26,6 +26,9 @@ dependencies:
   pinia-plugin-persistedstate:
     specifier: ^3.2.1
     version: 3.2.1(pinia@2.1.7)
+  pinia-plugin-yjs:
+    specifier: ^0.0.2
+    version: link:../../Github/pinia-plugin-yjs
   vue:
     specifier: ^3.3.13
     version: 3.3.13(typescript@5.3.3)

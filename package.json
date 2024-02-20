@@ -24,6 +24,7 @@
     "nprogress": "^0.2.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
+    "pinia-plugin-yjs": "^0.0.2",
     "vue": "^3.3.13",
     "vue-demi": "^0.14.6",
     "vue-i18n": "^9.8.0",
